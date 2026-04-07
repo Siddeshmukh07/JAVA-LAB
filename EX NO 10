@@ -1,0 +1,208 @@
+A}
+import javax.swing.*;
+import java.awt.event.*;
+
+public class MouseCoordinates extends JFrame implements MouseMotionListener {
+
+    JLabel label;
+
+    public MouseCoordinates() {
+        label = new JLabel("Move mouse inside the window");
+        add(label);
+
+        addMouseMotionListener(this);
+
+        setSize(400, 300);
+        setTitle("Mouse Coordinates");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        label.setText("X: " + e.getX() + " Y: " + e.getY());
+    }
+
+    public void mouseDragged(MouseEvent e) {}
+
+    public static void main(String[] args) {
+        new MouseCoordinates();
+    }
+}
+B}
+import javax.swing.*;
+import java.awt.event.*;
+
+public class SimpleTimer extends JFrame {
+
+    int count = 0;
+    JLabel label;
+    Timer timer;
+
+    public SimpleTimer() {
+        label = new JLabel("Time: 0");
+        JButton start = new JButton("Start");
+        JButton stop = new JButton("Stop");
+
+        timer = new Timer(1000, e -> {
+            count++;
+            label.setText("Time: " + count);
+        });
+
+        start.addActionListener(e -> timer.start());
+        stop.addActionListener(e -> timer.stop());
+
+        setLayout(new java.awt.FlowLayout());
+        add(label);
+        add(start);
+        add(stop);
+
+        setSize(300, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new SimpleTimer();
+    }
+}
+C}
+import javax.swing.*;
+import java.awt.event.*;
+
+public class ImageComboBox extends JFrame {
+
+    JLabel label;
+
+    public ImageComboBox() {
+        String[] images = {"img1.jpg", "img2.jpg", "img3.jpg"};
+        JComboBox<String> combo = new JComboBox<>(images);
+        label = new JLabel();
+
+        combo.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String img = (String) combo.getSelectedItem();
+                label.setIcon(new ImageIcon(img));
+            }
+        });
+
+        add(combo, "North");
+        add(label, "Center");
+
+        setSize(400, 300);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new ImageComboBox();
+    }
+}
+D}
+import javax.swing.*;
+import java.awt.event.*;
+
+public class ImageComboBox extends JFrame {
+
+    JLabel label;
+
+    public ImageComboBox() {
+        String[] images = {"img1.jpg", "img2.jpg", "img3.jpg"};
+        JComboBox<String> combo = new JComboBox<>(images);
+        label = new JLabel();
+
+        combo.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String img = (String) combo.getSelectedItem();
+                label.setIcon(new ImageIcon(img));
+            }
+        });
+
+        add(combo, "North");
+        add(label, "Center");
+
+        setSize(400, 300);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);import javax.swing.*;
+import java.awt.event.*;
+
+public class TextCounter extends JFrame {
+
+    JTextArea textArea;
+    JLabel label;
+
+    public TextCounter() {
+        textArea = new JTextArea(5, 20);
+        label = new JLabel("Characters: 0 Words: 0");
+
+        textArea.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                String text = textArea.getText();
+
+                int chars = text.length();
+                int words = text.trim().isEmpty() ? 0 : text.trim().split("\\s+").length;
+
+                label.setText("Characters: " + chars + " Words: " + words);
+            }
+        });
+
+        setLayout(new java.awt.FlowLayout());
+        add(new JScrollPane(textArea));
+        add(label);
+
+        setSize(350, 250);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new TextCounter();
+    }
+}
+F}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class BackgroundColorChanger extends JFrame {
+
+    public BackgroundColorChanger() {
+        String[] colors = {"Red", "Green", "Blue", "Yellow"};
+        JComboBox<String> combo = new JComboBox<>(colors);
+
+        combo.addActionListener(e -> {
+            String selected = (String) combo.getSelectedItem();
+
+            switch (selected) {
+                case "Red":
+                    getContentPane().setBackground(Color.RED);
+                    break;
+                case "Green":
+                    getContentPane().setBackground(Color.GREEN);
+                    break;
+                case "Blue":
+                    getContentPane().setBackground(Color.BLUE);
+                    break;
+                case "Yellow":
+                    getContentPane().setBackground(Color.YELLOW);
+                    break;
+            }
+        });
+
+        setLayout(new FlowLayout());
+        add(combo);
+
+        setSize(300, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new BackgroundColorChanger();
+    }
+}
+
+    public static void main(String[] args) {
+        new ImageComboBox();
+    }
+}
+E}

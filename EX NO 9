@@ -1,0 +1,156 @@
+A}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Calc extends JFrame implements ActionListener {
+
+    JTextField t = new JTextField();
+    double n1, n2;
+    char op;
+
+    Calc() {
+        setSize(250, 300);
+        setLayout(new BorderLayout());
+
+        add(t, BorderLayout.NORTH);
+
+        JPanel p = new JPanel(new GridLayout(5,4));
+        String b[] = {"7","8","9","/","4","5","6","*","1","2","3","-","0","C","=","+","%","√","x²","x³"};
+
+        for(String x : b){
+            JButton btn = new JButton(x);
+            btn.addActionListener(this);
+            p.add(btn);
+        }
+
+        add(p);
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e){
+        String c = e.getActionCommand();
+
+        if(c.matches("[0-9]")) t.setText(t.getText()+c);
+
+        else if(c.matches("[+\\-*/]")){
+            n1 = Double.parseDouble(t.getText());
+            op = c.charAt(0);
+            t.setText("");
+        }
+
+        else if(c.equals("=")){
+            n2 = Double.parseDouble(t.getText());
+            switch(op){
+                case '+': t.setText(""+(n1+n2)); break;
+                case '-': t.setText(""+(n1-n2)); break;
+                case '*': t.setText(""+(n1*n2)); break;
+                case '/': t.setText(""+(n1/n2)); break;
+            }
+        }
+
+        else if(c.equals("C")) t.setText("");
+
+        else if(c.equals("%")) t.setText(""+(Double.parseDouble(t.getText())/100));
+        else if(c.equals("√")) t.setText(""+Math.sqrt(Double.parseDouble(t.getText())));
+        else if(c.equals("x²")) t.setText(""+Math.pow(Double.parseDouble(t.getText()),2));
+        else if(c.equals("x³")) t.setText(""+Math.pow(Double.parseDouble(t.getText()),3));
+    }
+
+    public static void main(String[] args){
+        new Calc();
+    }
+}
+B}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class StationarySystem extends JFrame {
+
+    JCheckBox notebook, pen, pencil;
+    JButton orderBtn;
+
+    public StationarySystem() {
+        setTitle("Stationary Purchase System");
+        setSize(350, 250);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Layout
+        setLayout(new GridLayout(5, 1));
+
+        // Components
+        notebook = new JCheckBox("Notebook @ 50");
+        pen = new JCheckBox("Pen @ 30");
+        pencil = new JCheckBox("Pencil @ 10");
+
+        orderBtn = new JButton("Order");
+
+        // Add components
+        add(new JLabel("Stationary Purchase System", JLabel.CENTER));
+        add(notebook);
+        add(pen);
+        add(pencil);
+        add(orderBtn);
+
+        // Button Action
+        orderBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                processOrder();
+            }
+        });
+
+        setVisible(true);
+    }
+
+    private void processOrder() {
+        int total = 0;
+        String message = "";
+
+        try {
+            if (notebook.isSelected()) {
+                int qty = getQuantity("Notebook");
+                int cost = qty * 50;
+                total += cost;
+                message += "Notebook Quantity: " + qty + " Total: " + cost + "\n";
+            }
+
+            if (pen.isSelected()) {
+                int qty = getQuantity("Pen");
+                int cost = qty * 30;
+                total += cost;
+                message += "Pen Quantity: " + qty + " Total: " + cost + "\n";
+            }
+
+            if (pencil.isSelected()) {
+                int qty = getQuantity("Pencil");
+                int cost = qty * 10;
+                total += cost;
+                message += "Pencil Quantity: " + qty + " Total: " + cost + "\n";
+            }
+
+            if (message.equals("")) {
+                JOptionPane.showMessageDialog(this, "Please select at least one item!");
+                return;
+            }
+
+            message += "\nTotal: " + total;
+
+            JOptionPane.showMessageDialog(this, message, "Message", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Successfully Ordered.", "Alert", JOptionPane.WARNING_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Invalid input! Please enter numbers only.");
+        }
+    }
+
+    private int getQuantity(String item) {
+        String input = JOptionPane.showInputDialog("Enter Quantity for " + item + ":");
+        return Integer.parseInt(input);
+    }
+
+    public static void main(String[] args) {
+        new StationarySystem();
+    }
+}

@@ -1,0 +1,150 @@
+A) import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+class BallPanel extends JPanel implements Runnable, MouseListener {
+    private int x = 50, y = 50;
+    private int dx = 2, dy = 2;
+    private final int SIZE = 30;
+    private Thread thread;
+
+    public BallPanel() {
+        addMouseListener(this);
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.BLUE);
+        g.fillOval(x, y, SIZE, SIZE);
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            // Move ball
+            x += dx;
+            y += dy;
+
+            // Bounce off edges
+            if (x <= 0 || x + SIZE >= getWidth()) {
+                dx = -dx;
+            }
+            if (y <= 0 || y + SIZE >= getHeight()) {
+                dy = -dy;
+            }
+
+            repaint();
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (thread == null) {
+            thread = new Thread(this);
+            thread.start();
+        }
+    }
+
+    // Unused methods
+    public void mouseClicked(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+}
+
+public class BouncingBall {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Bouncing Ball");
+        BallPanel panel = new BallPanel();
+
+        frame.add(panel);
+        frame.setSize(400, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+}
+B)import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+class StopwatchApp extends JFrame implements Runnable {
+    private JLabel timeLabel;
+    private JButton startBtn, stopBtn, resetBtn;
+
+    private int seconds = 0;
+    private boolean running = false;
+    private Thread thread;
+
+    public StopwatchApp() {
+        setTitle("Stopwatch");
+
+        timeLabel = new JLabel("00:00:00", JLabel.CENTER);
+        timeLabel.setFont(new Font("Arial", Font.BOLD, 30));
+
+        startBtn = new JButton("Start");
+        stopBtn = new JButton("Stop");
+        resetBtn = new JButton("Reset");
+
+        JPanel panel = new JPanel();
+        panel.add(startBtn);
+        panel.add(stopBtn);
+        panel.add(resetBtn);
+
+        add(timeLabel, BorderLayout.CENTER);
+        add(panel, BorderLayout.SOUTH);
+
+        // Button actions
+        startBtn.addActionListener(e -> {
+            if (!running) {
+                running = true;
+                thread = new Thread(this);
+                thread.start();
+            }
+        });
+
+        stopBtn.addActionListener(e -> running = false);
+
+        resetBtn.addActionListener(e -> {
+            running = false;
+            seconds = 0;
+            updateLabel();
+        });
+
+        setSize(300, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+
+    @Override
+    public void run() {
+        while (running) {
+            seconds++;
+            updateLabel();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateLabel() {
+        int hrs = seconds / 3600;
+        int mins = (seconds % 3600) / 60;
+        int secs = seconds % 60;
+
+        String time = String.format("%02d:%02d:%02d", hrs, mins, secs);
+        timeLabel.setText(time);
+    }
+
+    public static void main(String[] args) {
+        new StopwatchApp();
+    }
+}

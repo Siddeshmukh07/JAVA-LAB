@@ -1,0 +1,113 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class LayoutDemo extends JFrame {
+
+    // Constructor
+    public LayoutDemo() {
+        setTitle("Layout Manager Demo");
+        setSize(500, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JTabbedPane tabs = new JTabbedPane();
+
+        tabs.add("BorderLayout", borderPanel());
+        tabs.add("FlowLayout", flowPanel());
+        tabs.add("GridLayout", gridPanel());
+
+        add(tabs);
+    }
+
+    // ---------------- BORDER LAYOUT ----------------
+    private JPanel borderPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel top = new JPanel();
+        JLabel label = new JLabel("Enter Number:");
+        JTextField input = new JTextField(10);
+        top.add(label);
+        top.add(input);
+
+        JPanel center = new JPanel(new GridLayout(1, 3));
+        JButton binary = new JButton("Binary");
+        JButton octal = new JButton("Octal");
+        JButton hex = new JButton("Hex");
+
+        center.add(binary);
+        center.add(octal);
+        center.add(hex);
+
+        JPanel bottom = new JPanel();
+        JTextField result = new JTextField(15);
+        bottom.add(new JLabel("Result:"));
+        bottom.add(result);
+
+        // Button actions
+        binary.addActionListener(e -> {
+            int num = Integer.parseInt(input.getText());
+            result.setText(Integer.toBinaryString(num));
+        });
+
+        octal.addActionListener(e -> {
+            int num = Integer.parseInt(input.getText());
+            result.setText(Integer.toOctalString(num));
+        });
+
+        hex.addActionListener(e -> {
+            int num = Integer.parseInt(input.getText());
+            result.setText(Integer.toHexString(num));
+        });
+
+        panel.add(top, BorderLayout.NORTH);
+        panel.add(center, BorderLayout.CENTER);
+        panel.add(bottom, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    // ---------------- FLOW LAYOUT ----------------
+    private JPanel flowPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 20));
+
+        JCheckBox java = new JCheckBox("Java");
+        JCheckBox python = new JCheckBox("Python");
+        JCheckBox cpp = new JCheckBox("C++");
+
+        panel.add(java);
+        panel.add(python);
+        panel.add(cpp);
+
+        return panel;
+    }
+
+    // ---------------- GRID LAYOUT ----------------
+    private JPanel gridPanel() {
+        JPanel panel = new JPanel(new GridLayout(2, 3, 5, 5));
+
+        JButton[] buttons = new JButton[6];
+
+        for (int i = 0; i < 6; i++) {
+            buttons[i] = new JButton(String.valueOf(i + 1));
+            panel.add(buttons[i]);
+        }
+
+        // Swap logic
+        for (int i = 0; i < 6; i++) {
+            int index = i;
+            buttons[i].addActionListener(e -> {
+                int swapWith = (index + 1) % 6;
+                String temp = buttons[index].getText();
+                buttons[index].setText(buttons[swapWith].getText());
+                buttons[swapWith].setText(temp);
+            });
+        }
+
+        return panel;
+    }
+
+    // ---------------- MAIN ----------------
+    public static void main(String[] args) {
+        new LayoutDemo().setVisible(true);
+    }
+}
